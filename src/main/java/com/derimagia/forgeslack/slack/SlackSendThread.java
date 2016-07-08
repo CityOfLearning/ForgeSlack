@@ -6,14 +6,14 @@ import net.gpedro.integrations.slack.SlackMessage;
  * @author derimagia
  */
 public class SlackSendThread implements Runnable {
-    private SlackMessage slackMessage;
+	private SlackMessage slackMessage;
 
-    public SlackSendThread(SlackMessage message) {
-        slackMessage = message;
-    }
+	public SlackSendThread(SlackMessage message) {
+		slackMessage = message;
+	}
 
-    @Override
-    public void run() {
-        SlackSender.getInstance().api.call(slackMessage);
-    }
+	@Override
+	public void run() {
+		SlackSender.getInstance().api.call(slackMessage);
+	}
 }
