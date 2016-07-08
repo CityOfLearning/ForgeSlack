@@ -4,14 +4,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.derimagia.forgeslack.handler.ConfigurationHandler;
-import com.derimagia.forgeslack.handler.FMLEventHandler;
-import com.derimagia.forgeslack.handler.ForgeEventHandler;
+import com.derimagia.forgeslack.handler.EventHandler;
 import com.derimagia.forgeslack.slack.SlackReceiveServer;
+import com.derimagia.forgeslack.slack.SlackSender;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
 /**
  * @author derimagia
@@ -29,8 +30,7 @@ public class ForgeSlack {
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 
 		if (ConfigurationHandler.enabled) {
-			MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
-			MinecraftForge.EVENT_BUS.register(new FMLEventHandler());
+			MinecraftForge.EVENT_BUS.register(new EventHandler());
 		}
 	}
 
@@ -38,6 +38,15 @@ public class ForgeSlack {
 	public void serverStarting(FMLServerStartingEvent event) {
 		if (ConfigurationHandler.enabled) {
 			new SlackReceiveServer();
+			SlackSender.getInstance().send("_Server is Starting Up_", event.getServer().getName());
+		}
+	}
+	
+	@Mod.EventHandler
+	public void serverStopping(FMLServerStoppingEvent event) {
+		if (ConfigurationHandler.enabled) {
+			new SlackReceiveServer();
+			SlackSender.getInstance().send("_Server is Shutting Down_", event.description());
 		}
 	}
 
