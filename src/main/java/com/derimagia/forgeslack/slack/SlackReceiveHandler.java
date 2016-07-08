@@ -12,7 +12,6 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import com.derimagia.forgeslack.ForgeSlack;
 import com.derimagia.forgeslack.handler.ConfigurationHandler;
-
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 
@@ -30,8 +29,9 @@ public class SlackReceiveHandler extends AbstractHandler {
 			// messages beginning with a slash unless its preceeded with a space
 			String text = request.getParameter("text").trim();
 			if (text.charAt(0) != '/') {
-				String message = String.format(ConfigurationHandler.slackSignature + " <%s> %s",
-						WordUtils.capitalizeFully(username), text);
+				String message = String.format("%s " + ConfigurationHandler.playerSignature + " %s",
+						ConfigurationHandler.slackSignature, WordUtils.capitalizeFully(username), text);
+				message = ConfigurationHandler.formatColors(message);
 				String token = request.getParameter("token");
 
 				if (!token.isEmpty() && token.equals(ConfigurationHandler.slackToken)) {
