@@ -17,8 +17,26 @@ public class ConfigurationHandler {
 	public static int jettyServerPort = 8085;
 	public static String slackSignature = "";
 	public static String playerSignature = "";
-	
+
 	public static final char COLOR_FORMAT_CHARACTER = '\u00a7';
+
+	/**
+	 * Format color codes
+	 *
+	 * @param message
+	 * @return formatted message
+	 */
+	public static String formatColors(String message) {
+		// TODO: Improve this to replace codes less aggressively
+		char[] b = message.toCharArray();
+		for (int i = 0; i < (b.length - 1); i++) {
+			if ((b[i] == '&') && ("0123456789AaBbCcDdEeFfKkLlMmNnOoRr".indexOf(b[i + 1]) > -1)) {
+				b[i] = COLOR_FORMAT_CHARACTER;
+				b[i + 1] = Character.toLowerCase(b[i + 1]);
+			}
+		}
+		return new String(b);
+	}
 
 	public static void init(File configFile) {
 		if (configuration == null) {
@@ -49,23 +67,5 @@ public class ConfigurationHandler {
 		if (configuration.hasChanged()) {
 			configuration.save();
 		}
-	}
-	
-	/**
-	 * Format color codes
-	 *
-	 * @param message
-	 * @return formatted message
-	 */
-	public static String formatColors(String message) {
-		// TODO: Improve this to replace codes less aggressively
-		char[] b = message.toCharArray();
-		for (int i = 0; i < (b.length - 1); i++) {
-			if ((b[i] == '&') && ("0123456789AaBbCcDdEeFfKkLlMmNnOoRr".indexOf(b[i + 1]) > -1)) {
-				b[i] = COLOR_FORMAT_CHARACTER;
-				b[i + 1] = Character.toLowerCase(b[i + 1]);
-			}
-		}
-		return new String(b);
 	}
 }

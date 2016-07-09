@@ -40,7 +40,13 @@ public class SlackSender {
 		SlackMessage slackMessage = new SlackMessage();
 		slackMessage.setText(message);
 		slackMessage.setUsername(username);
-		slackMessage.setIcon("https://mcapi.ca/avatar/3d/" + username);
+		if (!username.toLowerCase().equals("server")) {
+			// I think the 2d looks better
+			slackMessage.setIcon("https://mcapi.ca/avatar/2d/" + username);
+		} else {
+			//use the default icon
+			slackMessage.setIcon("https://dl.dropboxusercontent.com/u/33377940/logo.png");
+		}
 
 		// Send in a new thread so it doesn't block the game.
 		Thread thread = new Thread(new SlackSendThread(slackMessage));

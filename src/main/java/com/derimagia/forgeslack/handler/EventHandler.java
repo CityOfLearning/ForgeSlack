@@ -19,22 +19,19 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
  */
 public class EventHandler {
 
-	@SubscribeEvent
-	public void commandUsed(CommandEvent event) {
-		if (event.sender.getCommandSenderEntity() instanceof EntityPlayer) {
-			System.out.println(event.command.getCommandName() + " " + event.parameters);
-			SlackSender.getInstance().send(event.command.getCommandName() + " " + event.parameters,
-					event.sender.getName());
-		}
+	private static String getName(EntityPlayer player) {
+		return ScorePlayerTeam.formatPlayerName(player.getTeam(), player.getDisplayName().getUnformattedText());
 	}
 
 	@SubscribeEvent
-	public void serverChat(ServerChatEvent event) {
-		SlackSender.getInstance().send("_" + event.message + "_", event.username);
-	}
-	
-	private static String getName(EntityPlayer player) {
-		return ScorePlayerTeam.formatPlayerName(player.getTeam(), player.getDisplayName().getUnformattedText());
+	public void commandUsed(CommandEvent event) {
+		if (event.sender.getCommandSenderEntity() instanceof EntityPlayer) {
+			String command = event.command.getCommandName();
+			for (String params : event.parameters) {
+				command += " " + params;
+			}
+			SlackSender.getInstance().send(command, event.sender.getName());
+		}
 	}
 
 	@SubscribeEvent
@@ -77,6 +74,12 @@ public class EventHandler {
 					"_" + playerName + " has earned the achievement: " + achievementText.getUnformattedText() + "_",
 					playerName);
 		}
+	}
+
+	@SubscribeEvent
+	public void serverChat(ServerChatEvent event) {
+		//we might want to check for NPCs here
+		SlackSender.getInstance().send("_" + event.message + "_", event.username);
 	}
 
 }

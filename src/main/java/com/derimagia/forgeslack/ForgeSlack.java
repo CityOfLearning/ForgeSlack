@@ -41,7 +41,7 @@ public class ForgeSlack {
 			SlackSender.getInstance().send("_Server is Starting Up_", event.getServer().getName());
 		}
 	}
-	
+
 	@Mod.EventHandler
 	public void serverStopping(FMLServerStoppingEvent event) {
 		if (ConfigurationHandler.enabled) {

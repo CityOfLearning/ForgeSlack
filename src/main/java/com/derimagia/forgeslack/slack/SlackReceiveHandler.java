@@ -12,6 +12,7 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import com.derimagia.forgeslack.ForgeSlack;
 import com.derimagia.forgeslack.handler.ConfigurationHandler;
+
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 
