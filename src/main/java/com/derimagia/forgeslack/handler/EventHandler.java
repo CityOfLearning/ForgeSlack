@@ -26,7 +26,7 @@ public class EventHandler {
 	@SubscribeEvent
 	public void commandUsed(CommandEvent event) {
 		if (event.sender.getCommandSenderEntity() instanceof EntityPlayer) {
-			String command = event.command.getCommandName();
+			String command = "_[command]_ " + event.command.getCommandName();
 			for (String params : event.parameters) {
 				command += " " + params;
 			}
