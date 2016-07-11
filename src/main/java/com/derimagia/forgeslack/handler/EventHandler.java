@@ -26,7 +26,7 @@ public class EventHandler {
 	@SubscribeEvent
 	public void commandUsed(CommandEvent event) {
 		if (event.sender.getCommandSenderEntity() instanceof EntityPlayer) {
-			String command = "_[command]_ " + event.command.getCommandName();
+			String command = "_[command]_ /" + event.command.getCommandName();
 			for (String params : event.parameters) {
 				command += " " + params;
 			}
@@ -78,8 +78,9 @@ public class EventHandler {
 
 	@SubscribeEvent
 	public void serverChat(ServerChatEvent event) {
-		//we might want to check for NPCs here
-		SlackSender.getInstance().send("_" + event.message + "_", event.username);
+		if(!(event.player instanceof FakePlayer)){
+			SlackSender.getInstance().send("_" + event.message + "_", event.username);
+		}
 	}
 
 }

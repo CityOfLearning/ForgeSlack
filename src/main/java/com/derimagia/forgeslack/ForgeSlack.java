@@ -38,7 +38,7 @@ public class ForgeSlack {
 	public void serverStarting(FMLServerStartingEvent event) {
 		if (ConfigurationHandler.enabled) {
 			new SlackReceiveServer();
-			SlackSender.getInstance().send("_Server is Starting Up_", "Server");
+			SlackSender.getInstance().send("_Server is Online_", "Server");
 		}
 	}
 
