@@ -80,7 +80,7 @@ public class EventHandler {
 	@SubscribeEvent
 	public void serverChat(ServerChatEvent event) {
 		if(!(event.player instanceof FakePlayer)){
-			SlackSender.getInstance().send("_" + event.message + "_", event.username);
+			SlackSender.getInstance().send(event.message, event.username);
 		}
 	}
 
