@@ -62,7 +62,7 @@ public class SlackReceiveHandler extends AbstractHandler {
 			} else if (text.charAt(0) == '$') {
 				// this is a special command from slack
 
-				String cmd = text.indexOf(' ') > 0 ? text.substring(1) : text.substring(1, text.indexOf(' '));
+				String cmd = text.indexOf(' ') < 0 ? text.substring(1) : text.substring(1, text.indexOf(' '));
 
 				if (cmd.toLowerCase().equals("players")) {
 					SlackSender.getInstance().send(String.format("Server has %d users logged on",
