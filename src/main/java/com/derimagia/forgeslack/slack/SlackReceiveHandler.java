@@ -61,7 +61,8 @@ public class SlackReceiveHandler extends AbstractHandler {
 				}
 			} else if (text.charAt(0) == '$') {
 				// this is a special command from slack
-				String cmd = text.substring(1, text.indexOf(' '));
+
+				String cmd = text.indexOf(' ') > 0 ? text.substring(1) : text.substring(1, text.indexOf(' '));
 
 				if (cmd.toLowerCase().equals("players")) {
 					SlackSender.getInstance().send(String.format("Server has %d users logged on",
@@ -72,7 +73,7 @@ public class SlackReceiveHandler extends AbstractHandler {
 					}
 					SlackSender.getInstance().send("Usernames: " + users, "Server");
 				} else if (cmd.toLowerCase().equals("locate")) {
-					String user = text.substring(text.indexOf(' ')+1);
+					String user = text.substring(text.indexOf(' ') + 1);
 
 					EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager()
 							.getPlayerByUsername(user);
@@ -84,8 +85,10 @@ public class SlackReceiveHandler extends AbstractHandler {
 								.send(String.format("%s is at %d, %d, %d in dim %d with gamemode %s", player.getName(),
 										point.getX(), point.getY(), point.getZ(), player.dimension,
 										player.theItemInWorldManager.getGameType().getName()), "Server");
+					} else {
+						SlackSender.getInstance().send("Cannot find player", "Server");
 					}
-				} else if (cmd.toLowerCase().equals("stats")) {
+				} else if (cmd.toLowerCase().equals("status")) {
 					DecimalFormat timeFormatter = new DecimalFormat("########0.000");
 
 					String statMsg = "";
@@ -112,6 +115,14 @@ public class SlackReceiveHandler extends AbstractHandler {
 					double meanTPS = Math.min(1000.0 / meanTickTime, 20);
 					SlackSender.getInstance().send(String.format("%s : Mean tick time: %d ms. Mean TPS: %d", "Overall",
 							timeFormatter.format(meanTickTime), timeFormatter.format(meanTPS)), "Server");
+				} else if (cmd.toLowerCase().equals("help")) {
+					SlackSender.getInstance().send("Possible Commands are: players, locate, status", "Server");
+					SlackSender.getInstance().send("players reports number of players and their names", "Server");
+					SlackSender.getInstance().send("locate takes a username arguement and reports their location", "Server");
+					SlackSender.getInstance().send("status give a comprehensive report of the server status", "Server");
+				} else {
+				
+					SlackSender.getInstance().send("Command not recognized: " + cmd, "Server");
 				}
 
 			} else {
