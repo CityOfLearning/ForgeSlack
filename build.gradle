@@ -15,6 +15,13 @@ buildscript {
     }
 }
 
+
+
+plugins {
+    id "com.github.johnrengelman.shadow" version "1.2.2" // shading
+}
+apply plugin: "net.minecraftforge.gradle.forge"  // adds the forge dependency
+
 repositories {
     jcenter()
 		
@@ -23,12 +30,6 @@ repositories {
 		url "https://jitpack.io" 
 	}
 }
-
-plugins {
-    id "com.github.johnrengelman.shadow" version "1.2.2" // shading
-}
-apply plugin: "net.minecraftforge.gradle.forge"  // adds the forge dependency
-
 
 version = "dyn0.1"
 group= "com.derimagia.forgeslack" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
