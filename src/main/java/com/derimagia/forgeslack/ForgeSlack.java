@@ -10,7 +10,7 @@ import com.derimagia.forgeslack.handler.ConfigurationHandler;
 import com.derimagia.forgeslack.handler.EventHandler;
 import com.derimagia.forgeslack.slack.SlackReceiveServer;
 import com.derimagia.forgeslack.slack.SlackSender;
-import com.dyn.utils.CCOLPlayerInfo;
+//import com.dyn.utils.CCOLPlayerInfo;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -29,7 +29,7 @@ public class ForgeSlack {
 
 	public static Logger log = LogManager.getLogger(modId);
 	
-	public static Map<String, CCOLPlayerInfo> playerInfo = new HashMap<String, CCOLPlayerInfo>();
+//	public static Map<String, CCOLPlayerInfo> playerInfo = new HashMap<String, CCOLPlayerInfo>();
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {

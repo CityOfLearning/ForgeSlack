@@ -2,12 +2,14 @@ package com.derimagia.forgeslack.handler;
 
 import com.derimagia.forgeslack.ForgeSlack;
 import com.derimagia.forgeslack.slack.SlackSender;
-import com.dyn.utils.CCOLPlayerInfo;
+//import com.dyn.utils.CCOLPlayerInfo;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.CommandEvent;
@@ -23,13 +25,14 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 public class EventHandler {
 
 	private static String getName(EntityPlayer player) {
-		if (!ForgeSlack.playerInfo.containsKey(player.getDisplayName().getUnformattedText())) {
-			return player.getDisplayName().getUnformattedText();
-		} else {
-			//minecraft name and student name
-			return player.getDisplayName().getUnformattedText() + " - "
-					+ ForgeSlack.playerInfo.get(player.getDisplayName().getUnformattedText()).getDisplayName();
-		}
+//		if (!ForgeSlack.playerInfo.containsKey(player.getDisplayName().getUnformattedText())) {
+//			return player.getDisplayName().getUnformattedText();
+//		} else {
+//			//minecraft name and student name
+//			return player.getDisplayName().getUnformattedText() + " - "
+//					+ ForgeSlack.playerInfo.get(player.getDisplayName().getUnformattedText()).getDisplayName();
+//		}
+		return ScorePlayerTeam.formatPlayerName(player.getTeam(), player.getDisplayName().getUnformattedText());
 	}
 
 	@SubscribeEvent
@@ -45,27 +48,25 @@ public class EventHandler {
 
 	@SubscribeEvent
 	public void onJoin(PlayerEvent.PlayerLoggedInEvent event) {
-		// @TODO: Localize this?
 		SlackSender.getInstance().send("_[Joined the Game]_", getName(event.player));
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				if (!ForgeSlack.playerInfo.containsKey(event.player.getDisplayName().getUnformattedText())) {
-					ForgeSlack.playerInfo.put(event.player.getDisplayName().getUnformattedText(), new CCOLPlayerInfo(getName(event.player)));
-				}
-			}
-		}).start();
+//		new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+//				if (!ForgeSlack.playerInfo.containsKey(event.player.getDisplayName().getUnformattedText())) {
+//					ForgeSlack.playerInfo.put(event.player.getDisplayName().getUnformattedText(), new CCOLPlayerInfo(getName(event.player)));
+//				}
+//			}
+//		}).start();
 
 	}
 
 	@SubscribeEvent
 	public void onLeave(PlayerEvent.PlayerLoggedOutEvent event) {
-		// @TODO: Localize this?
 		SlackSender.getInstance().send("_[Left the Game]_", getName(event.player));
-		if (ForgeSlack.playerInfo.containsKey(event.player.getDisplayName().getUnformattedText())) {
-			ForgeSlack.playerInfo.remove(event.player.getDisplayName().getUnformattedText());
-		}
+//		if (ForgeSlack.playerInfo.containsKey(event.player.getDisplayName().getUnformattedText())) {
+//			ForgeSlack.playerInfo.remove(event.player.getDisplayName().getUnformattedText());
+//		}
 	}
 
 	@SubscribeEvent
@@ -87,13 +88,16 @@ public class EventHandler {
 				return;
 			}
 
-			IChatComponent achievementComponent = event.achievement.getStatName();
+			String achievementTitle = I18n.format(event.achievement.getStatName().getUnformattedText(), new Object[0]);
+			IChatComponent achievementComponent = new ChatComponentTranslation(event.achievement.getStatName().getUnformattedText());
 			IChatComponent achievementText = new ChatComponentText("[").appendSibling(achievementComponent)
 					.appendText("]");
 
+			
+			
 			String playerName = getName(event.entityPlayer);
 			SlackSender.getInstance().send(
-					"_" + playerName + " has earned the achievement: " + achievementText.getUnformattedText() + "_",
+					"_" + playerName + " has earned the achievement: " + achievementText.getUnformattedText() + "_" + achievementTitle,
 					playerName);
 		}
 	}
