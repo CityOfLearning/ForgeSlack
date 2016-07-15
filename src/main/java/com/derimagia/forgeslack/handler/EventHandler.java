@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 public class EventHandler {
 
 	private static String getName(EntityPlayer player) {
-		if (!ForgeSlack.playerInfo.containsKey(player.getDisplayName())) {
+		if (!ForgeSlack.playerInfo.containsKey(player.getDisplayName().getUnformattedText())) {
 			return player.getDisplayName().getUnformattedText();
 		} else {
 			//minecraft name and student name
