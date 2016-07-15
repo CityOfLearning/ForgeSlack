@@ -15,13 +15,22 @@ buildscript {
     }
 }
 
+repositories {
+    jcenter()
+		
+	maven { 
+		name = "jitpack"
+		url "https://jitpack.io" 
+	}
+}
+
 plugins {
     id "com.github.johnrengelman.shadow" version "1.2.2" // shading
 }
 apply plugin: "net.minecraftforge.gradle.forge"  // adds the forge dependency
 
 
-version = "1.8.9-0.1"
+version = "dyn0.1"
 group= "com.derimagia.forgeslack" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "forgeslack"
 
@@ -31,6 +40,9 @@ targetCompatibility = 1.8
 dependencies {
     compile 'net.gpedro.integrations.slack:slack-webhook:1.1.1'
     compile 'org.eclipse.jetty:jetty-server:9.2.14.v20151106'
+	compile 'com.github.CityOfLearning:ForgeEssentials:1.8.9-lite:server'
+	
+	compile files('libs/DYNCityServer-1.0.jar')
 }
 
 minecraft {

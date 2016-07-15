@@ -13,6 +13,10 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import com.derimagia.forgeslack.ForgeSlack;
 import com.derimagia.forgeslack.handler.ConfigurationHandler;
+import com.forgeessentials.api.APIRegistry;
+import com.forgeessentials.api.permissions.Zone;
+import com.forgeessentials.commons.selections.WarpPoint;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
@@ -85,6 +89,14 @@ public class SlackReceiveHandler extends AbstractHandler {
 								.send(String.format("%s is at %d, %d, %d in dim %d with gamemode %s", player.getName(),
 										point.getX(), point.getY(), point.getZ(), player.dimension,
 										player.theItemInWorldManager.getGameType().getName()), "Server");
+						
+						WarpPoint ppoint = new WarpPoint(player);
+						
+						String zones = "Player is in zones:";
+						for(Zone zone : APIRegistry.perms.getServerZone().getZonesAt(ppoint.toWorldPoint())){
+							zones += "\n" + zone.getName();
+						}
+						SlackSender.getInstance().send(zones, "Server");
 					} else {
 						SlackSender.getInstance().send("Cannot find player", "Server");
 					}

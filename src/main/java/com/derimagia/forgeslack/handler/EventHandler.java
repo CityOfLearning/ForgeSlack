@@ -1,6 +1,8 @@
 package com.derimagia.forgeslack.handler;
 
+import com.derimagia.forgeslack.ForgeSlack;
 import com.derimagia.forgeslack.slack.SlackSender;
+import com.dyn.utils.CCOLPlayerInfo;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -21,7 +23,13 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 public class EventHandler {
 
 	private static String getName(EntityPlayer player) {
-		return ScorePlayerTeam.formatPlayerName(player.getTeam(), player.getDisplayName().getUnformattedText());
+		if (!ForgeSlack.playerInfo.containsKey(player.getDisplayName())) {
+			return player.getDisplayName().getUnformattedText();
+		} else {
+			//minecraft name and student name
+			return player.getDisplayName().getUnformattedText() + " - "
+					+ ForgeSlack.playerInfo.get(player.getDisplayName().getUnformattedText()).getDisplayName();
+		}
 	}
 
 	@SubscribeEvent
@@ -39,12 +47,25 @@ public class EventHandler {
 	public void onJoin(PlayerEvent.PlayerLoggedInEvent event) {
 		// @TODO: Localize this?
 		SlackSender.getInstance().send("_[Joined the Game]_", getName(event.player));
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if (!ForgeSlack.playerInfo.containsKey(event.player.getDisplayName().getUnformattedText())) {
+					ForgeSlack.playerInfo.put(event.player.getDisplayName().getUnformattedText(), new CCOLPlayerInfo(getName(event.player)));
+				}
+			}
+		}).start();
+
 	}
 
 	@SubscribeEvent
 	public void onLeave(PlayerEvent.PlayerLoggedOutEvent event) {
 		// @TODO: Localize this?
 		SlackSender.getInstance().send("_[Left the Game]_", getName(event.player));
+		if (ForgeSlack.playerInfo.containsKey(event.player.getDisplayName().getUnformattedText())) {
+			ForgeSlack.playerInfo.remove(event.player.getDisplayName().getUnformattedText());
+		}
 	}
 
 	@SubscribeEvent
@@ -79,8 +100,8 @@ public class EventHandler {
 
 	@SubscribeEvent
 	public void serverChat(ServerChatEvent event) {
-		if(!(event.player instanceof FakePlayer)){
-			SlackSender.getInstance().send(event.message, event.username);
+		if (!(event.player instanceof FakePlayer)) {
+			SlackSender.getInstance().send(event.message, getName(event.player));
 		}
 	}
 
