@@ -19,6 +19,7 @@ public class SlackReceiveServer {
 	private Server server = null;
 
 	public SlackReceiveServer() {
+		ForgeSlack.log.info("Starting ForgeSlack on Port: " + ConfigurationHandler.jettyServerPort);
 		server = new Server(ConfigurationHandler.jettyServerPort);
 		server.setHandler(new SlackReceiveHandler());
 
@@ -35,6 +36,7 @@ public class SlackReceiveServer {
 
 		} catch (Exception e) {
 			ForgeSlack.log.error("Error starting ForgeSlack server: " + e);
+			e.printStackTrace();
 		}
 	}
 }

@@ -10,11 +10,6 @@ import com.derimagia.forgeslack.slack.SlackSender;
 public class Help extends BaseSlackCommand {
 
 	@Override
-	public List<String> getCommandAliases() {
-		return null;
-	}
-
-	@Override
 	public String getCommandName() {
 		return "help";
 	}

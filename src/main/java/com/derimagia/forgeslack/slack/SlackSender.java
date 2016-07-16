@@ -1,5 +1,6 @@
 package com.derimagia.forgeslack.slack;
 
+import com.derimagia.forgeslack.ForgeSlack;
 import com.derimagia.forgeslack.handler.ConfigurationHandler;
 
 import net.gpedro.integrations.slack.SlackApi;
@@ -39,7 +40,7 @@ public class SlackSender {
 	public void send(String message, String username) {
 		SlackMessage slackMessage = new SlackMessage();
 		slackMessage.setText(message);
-		slackMessage.setUsername(username);
+		slackMessage.setUsername(ForgeSlack.playerInfo.get(username).getDisplayName()+"-"+username);
 		if (!username.toLowerCase().equals("server")) {
 			// I think the 2d looks better
 			slackMessage.setIcon("https://mcapi.ca/avatar/2d/" + username);

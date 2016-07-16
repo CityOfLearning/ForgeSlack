@@ -1,21 +1,21 @@
 package com.derimagia.forgeslack.slack.commands;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.derimagia.forgeslack.slack.SlackSender;
 import com.forgeessentials.api.APIRegistry;
 import com.forgeessentials.api.permissions.Zone;
+//import com.forgeessentials.api.APIRegistry;
+//import com.forgeessentials.api.permissions.Zone;
+//import com.forgeessentials.commons.selections.WorldPoint;
 import com.forgeessentials.commons.selections.WorldPoint;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.BlockPos;
 
 public class Locate extends BaseSlackCommand {
-
-	@Override
-	public List<String> getCommandAliases() {
-		return null;
-	}
 
 	@Override
 	public String getCommandName() {
@@ -40,11 +40,13 @@ public class Locate extends BaseSlackCommand {
 							point.getX(), point.getY(), point.getZ(), player.dimension,
 							player.theItemInWorldManager.getGameType().getName()), "Server");
 
-			String zones = "Player is in zones:";
-			for (Zone zone : APIRegistry.perms.getServerZone().getZonesAt(point)) {
-				zones += "\n" + zone.getName();
+			String zoneMsg = "Player is in zones:";
+			List<Zone> zones = APIRegistry.perms.getServerZone().getZonesAt(point);
+			Collections.reverse(zones);
+			for (Zone zone : zones) {
+				zoneMsg += "\n" + zone.getName();
 			}
-			SlackSender.getInstance().send(zones, "Server");
+			SlackSender.getInstance().send(zoneMsg, "Server");
 		} else {
 			SlackSender.getInstance().send("Cannot find player", "Server");
 		}

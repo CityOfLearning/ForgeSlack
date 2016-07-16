@@ -1,7 +1,8 @@
 package com.derimagia.forgeslack.handler;
 
+import com.derimagia.forgeslack.ForgeSlack;
 import com.derimagia.forgeslack.slack.SlackSender;
-//import com.dyn.utils.CCOLPlayerInfo;
+import com.dyn.utils.CCOLPlayerInfo;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,16 +25,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 public class EventHandler {
 
 	private static String getName(EntityPlayer player) {
-		// if
-		// (!ForgeSlack.playerInfo.containsKey(player.getDisplayName().getUnformattedText()))
-		// {
-		// return player.getDisplayName().getUnformattedText();
-		// } else {
-		// //minecraft name and student name
-		// return player.getDisplayName().getUnformattedText() + " - "
-		// +
-		// ForgeSlack.playerInfo.get(player.getDisplayName().getUnformattedText()).getDisplayName();
-		// }
 		return ScorePlayerTeam.formatPlayerName(player.getTeam(), player.getDisplayName().getUnformattedText());
 	}
 
@@ -52,28 +43,24 @@ public class EventHandler {
 	public void onJoin(PlayerEvent.PlayerLoggedInEvent event) {
 		SlackSender.getInstance().send("_[Joined the Game]_", getName(event.player));
 
-		// new Thread(new Runnable() {
-		// @Override
-		// public void run() {
-		// if
-		// (!ForgeSlack.playerInfo.containsKey(event.player.getDisplayName().getUnformattedText()))
-		// {
-		// ForgeSlack.playerInfo.put(event.player.getDisplayName().getUnformattedText(),
-		// new CCOLPlayerInfo(getName(event.player)));
-		// }
-		// }
-		// }).start();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if (!ForgeSlack.playerInfo.containsKey(event.player.getDisplayName().getUnformattedText())) {
+					ForgeSlack.playerInfo.put(event.player.getDisplayName().getUnformattedText(),
+							new CCOLPlayerInfo(getName(event.player)));
+				}
+			}
+		}).start();
 
 	}
 
 	@SubscribeEvent
 	public void onLeave(PlayerEvent.PlayerLoggedOutEvent event) {
 		SlackSender.getInstance().send("_[Left the Game]_", getName(event.player));
-		// if
-		// (ForgeSlack.playerInfo.containsKey(event.player.getDisplayName().getUnformattedText()))
-		// {
-		// ForgeSlack.playerInfo.remove(event.player.getDisplayName().getUnformattedText());
-		// }
+		if (ForgeSlack.playerInfo.containsKey(event.player.getDisplayName().getUnformattedText())) {
+			ForgeSlack.playerInfo.remove(event.player.getDisplayName().getUnformattedText());
+		}
 	}
 
 	@SubscribeEvent

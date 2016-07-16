@@ -15,8 +15,6 @@ buildscript {
     }
 }
 
-
-
 plugins {
     id "com.github.johnrengelman.shadow" version "1.2.2" // shading
 }
@@ -39,9 +37,11 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile 'net.gpedro.integrations.slack:slack-webhook:1.1.1'
+    compile 'net.gpedro.integrations.slack:slack-webhook:1.1.2'
     compile 'org.eclipse.jetty:jetty-server:9.2.14.v20151106'
-	compile 'com.github.CityOfLearning:ForgeEssentials:1.8.9-lite:server'	
+	compile 'com.github.CityOfLearning:ForgeEssentials:1.8.9-lite:server'
+	compile 'com.github.CityOfLearning:DYNServerMod:1.8.9dev-SNAPSHOT'
+	
 }
 
 minecraft {
@@ -53,12 +53,15 @@ minecraft {
 }
 
 shadowJar {
-
-	dependencies {
-      exclude(dependency('com.github.CityOfLearning:ForgeEssentials:1.8.9-lite:server'))
-   }
-   
     classifier = ""
+	
+	dependencies {
+		exclude(dependency('com.github.CityOfLearning:ForgeEssentials:1.8.9-lite:server'))
+		exclude(dependency('com.github.CityOfLearning:DYNServerMod:1.8.9dev-SNAPSHOT'))
+		exclude(dependency('com.github.CityOfLearning:rabbit-gui:DYN-CityServer-SNAPSHOT'))
+		exclude(dependency('commons-net:commons-net:3.5'))
+		exclude(dependency('net.objecthunter:exp4j:0.4.5'))
+	}
     relocate "net.gpedro.integrations.slack", "com.derimagia.forgeslack.net.gpedro.integrations.slack"
     relocate "org.eclipse.jetty", "com.derimagia.forgeslack.org.eclipse.jetty"
 }

@@ -11,11 +11,6 @@ import net.minecraft.server.MinecraftServer;
 public class Whisper extends BaseSlackCommand {
 
 	@Override
-	public List<String> getCommandAliases() {
-		return null;
-	}
-
-	@Override
 	public String getCommandName() {
 		return "say";
 	}

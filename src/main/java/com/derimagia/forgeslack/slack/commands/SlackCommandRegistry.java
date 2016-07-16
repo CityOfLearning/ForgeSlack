@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.derimagia.forgeslack.ForgeSlack;
+import com.derimagia.forgeslack.handler.ConfigurationHandler;
 import com.derimagia.forgeslack.slack.SlackSender;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -69,6 +71,7 @@ public class SlackCommandRegistry {
 	 * commands
 	 */
 	public ISlackCommand registerCommand(ISlackCommand command) {
+		ForgeSlack.log.info("Registering Command: " + command.getCommandName());
 		commandMap.put(command.getCommandName(), command);
 		commandSet.add(command);
 

@@ -8,11 +8,6 @@ import net.minecraft.server.MinecraftServer;
 public class DoMcCommand extends BaseSlackCommand {
 
 	@Override
-	public List<String> getCommandAliases() {
-		return null;
-	}
-
-	@Override
 	public String getCommandName() {
 		return "cmd";
 	}

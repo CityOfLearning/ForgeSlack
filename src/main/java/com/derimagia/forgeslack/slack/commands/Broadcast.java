@@ -12,11 +12,6 @@ import net.minecraft.util.ChatComponentText;
 public class Broadcast extends BaseSlackCommand {
 
 	@Override
-	public List<String> getCommandAliases() {
-		return null;
-	}
-
-	@Override
 	public String getCommandName() {
 		return "talk";
 	}

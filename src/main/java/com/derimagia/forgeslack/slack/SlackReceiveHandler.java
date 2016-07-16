@@ -28,8 +28,13 @@ public class SlackReceiveHandler extends AbstractHandler {
 
 			String token = request.getParameter("token");
 
-			if (!token.isEmpty() && token.equals(ConfigurationHandler.slackToken)) {
-				ForgeSlack.slackCommands.executeCommand(username, text);
+			//have to filter otherwise slackbot will spam itself
+			if (text.charAt(0) == '$') {
+				if (!token.isEmpty() && token.equals(ConfigurationHandler.slackToken)) {
+					if(!ForgeSlack.slackCommands.executeCommand(username, text)){
+						SlackSender.getInstance().send("Failed to Execute Command", "Server");
+					}
+				}
 			}
 		}
 	}

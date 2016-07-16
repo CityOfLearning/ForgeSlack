@@ -9,11 +9,6 @@ import net.minecraft.server.MinecraftServer;
 public class ServerUsers extends BaseSlackCommand {
 
 	@Override
-	public List<String> getCommandAliases() {
-		return null;
-	}
-
-	@Override
 	public String getCommandName() {
 		return "players";
 	}
