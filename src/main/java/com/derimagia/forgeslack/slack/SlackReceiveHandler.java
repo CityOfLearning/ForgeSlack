@@ -1,27 +1,16 @@
 package com.derimagia.forgeslack.slack;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.text.WordUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import com.derimagia.forgeslack.ForgeSlack;
 import com.derimagia.forgeslack.handler.ConfigurationHandler;
-import com.forgeessentials.api.APIRegistry;
-import com.forgeessentials.api.permissions.Zone;
-import com.forgeessentials.commons.selections.WarpPoint;
-
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraftforge.common.DimensionManager;
 
 /**
  * @author derimagia
@@ -36,132 +25,12 @@ public class SlackReceiveHandler extends AbstractHandler {
 			// we need to remove the whitespace as slack will not let you send
 			// messages beginning with a slash unless its preceeded with a space
 			String text = request.getParameter("text").trim();
-			if (text.charAt(0) == '/') {
-				String token = request.getParameter("token");
 
-				if (!token.isEmpty() && token.equals(ConfigurationHandler.slackToken)) {
-					// we probably need to do something to configure slack so it
-					// only runs commands that we are ok with
-					MinecraftServer.getServer().getCommandManager().executeCommand(MinecraftServer.getServer(), text);
-				} else {
-					ForgeSlack.log.error("Token on Slack Outgoing WebHook is invalid! Ignoring Request.");
-				}
-			} else if (text.charAt(0) == '@') {
-				String token = request.getParameter("token");
+			String token = request.getParameter("token");
 
-				if (!token.isEmpty() && token.equals(ConfigurationHandler.slackToken)) {
-
-					String user = text.substring(1, text.indexOf(' '));
-					String whisper = text.substring(text.indexOf(' '));
-
-					String message = String.format("/w %s " + ConfigurationHandler.playerSignature + " %s", user,
-							WordUtils.capitalizeFully(username), whisper);
-					message = ConfigurationHandler.formatColors(message);
-					MinecraftServer.getServer().getCommandManager().executeCommand(MinecraftServer.getServer(),
-							message);
-
-				} else {
-					ForgeSlack.log.error("Token on Slack Outgoing WebHook is invalid! Ignoring Request.");
-				}
-			} else if (text.charAt(0) == '$') {
-				// this is a special command from slack
-
-				String cmd = text.indexOf(' ') < 0 ? text.substring(1) : text.substring(1, text.indexOf(' '));
-
-				if (cmd.toLowerCase().equals("players")) {
-					SlackSender.getInstance().send(String.format("Server has %d users logged on",
-							MinecraftServer.getServer().getCurrentPlayerCount()), "Server");
-					String users = "";
-					for (String user : MinecraftServer.getServer().getAllUsernames()) {
-						users += user + ", ";
-					}
-					SlackSender.getInstance().send("Usernames: " + users, "Server");
-				} else if (cmd.toLowerCase().equals("locate")) {
-					String user = text.substring(text.indexOf(' ') + 1);
-
-					EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager()
-							.getPlayerByUsername(user);
-
-					if (player != null) {
-						// WorldPoint point = new WorldPoint(player);
-						BlockPos point = player.getPosition();
-						SlackSender.getInstance()
-								.send(String.format("%s is at %d, %d, %d in dim %d with gamemode %s", player.getName(),
-										point.getX(), point.getY(), point.getZ(), player.dimension,
-										player.theItemInWorldManager.getGameType().getName()), "Server");
-						
-						WarpPoint ppoint = new WarpPoint(player);
-						
-						String zones = "Player is in zones:";
-						for(Zone zone : APIRegistry.perms.getServerZone().getZonesAt(ppoint.toWorldPoint())){
-							zones += "\n" + zone.getName();
-						}
-						SlackSender.getInstance().send(zones, "Server");
-					} else {
-						SlackSender.getInstance().send("Cannot find player", "Server");
-					}
-				} else if (cmd.toLowerCase().equals("status")) {
-					DecimalFormat timeFormatter = new DecimalFormat("########0.000");
-
-					String statMsg = "";
-					statMsg += "Memory usage:\n";
-					statMsg += "Max: " + (Runtime.getRuntime().maxMemory() / 1024 / 1024) + " MiB\n";
-					statMsg += "Total: " + (Runtime.getRuntime().totalMemory() / 1024 / 1024) + " MiB\n";
-					statMsg += "Free: " + (Runtime.getRuntime().freeMemory() / 1024 / 1024) + " MiB\n";
-					long used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-					statMsg += "Used: " + (used / 1024 / 1024) + " MiB\n";
-					statMsg += "Average tick time: "
-							+ timeFormatter.format(mean(MinecraftServer.getServer().tickTimeArray) * 1.0E-6D) + " ms\n";
-
-					SlackSender.getInstance().send(statMsg, "Server");
-
-					for (Integer dimId : DimensionManager.getIDs()) {
-						double worldTickTime = mean(MinecraftServer.getServer().worldTickTimes.get(dimId)) * 1.0E-6D;
-						double worldTPS = Math.min(1000.0 / worldTickTime, 20);
-						SlackSender.getInstance()
-								.send(String.format("%s : Mean tick time: %d ms. Mean TPS: %d",
-										String.format("Dim %d ", dimId), timeFormatter.format(worldTickTime),
-										timeFormatter.format(worldTPS)), "Server");
-					}
-					double meanTickTime = mean(MinecraftServer.getServer().tickTimeArray) * 1.0E-6D;
-					double meanTPS = Math.min(1000.0 / meanTickTime, 20);
-					SlackSender.getInstance().send(String.format("%s : Mean tick time: %d ms. Mean TPS: %d", "Overall",
-							timeFormatter.format(meanTickTime), timeFormatter.format(meanTPS)), "Server");
-				} else if (cmd.toLowerCase().equals("help")) {
-					SlackSender.getInstance().send("Possible Commands are: players, locate, status", "Server");
-					SlackSender.getInstance().send("players reports number of players and their names", "Server");
-					SlackSender.getInstance().send("locate takes a username arguement and reports their location", "Server");
-					SlackSender.getInstance().send("status give a comprehensive report of the server status", "Server");
-				} else {
-				
-					SlackSender.getInstance().send("Command not recognized: " + cmd, "Server");
-				}
-
-			} else {
-				String message = String.format("%s " + ConfigurationHandler.playerSignature + " %s",
-						ConfigurationHandler.slackSignature, WordUtils.capitalizeFully(username), text);
-				message = ConfigurationHandler.formatColors(message);
-				String token = request.getParameter("token");
-
-				if (!token.isEmpty() && token.equals(ConfigurationHandler.slackToken)) {
-					if (!username.isEmpty() && !(username.trim().equals("slackbot"))) {
-						MinecraftServer.getServer().getConfigurationManager()
-								.sendChatMsg(new ChatComponentText(message));
-					}
-				} else {
-					ForgeSlack.log.error("Token on Slack Outgoing WebHook is invalid! Ignoring Request.");
-				}
-
+			if (!token.isEmpty() && token.equals(ConfigurationHandler.slackToken)) {
+				ForgeSlack.slackCommands.executeCommand(username, text);
 			}
 		}
-	}
-
-	private static long mean(long[] values) {
-		long sum = 0l;
-		for (long v : values) {
-			sum += v;
-		}
-
-		return sum / values.length;
 	}
 }

@@ -41,9 +41,7 @@ targetCompatibility = 1.8
 dependencies {
     compile 'net.gpedro.integrations.slack:slack-webhook:1.1.1'
     compile 'org.eclipse.jetty:jetty-server:9.2.14.v20151106'
-	compile 'com.github.CityOfLearning:ForgeEssentials:1.8.9-lite:server'
-	
-//	compile files('libs/DYNCityServer-1.0.jar')
+	compile 'com.github.CityOfLearning:ForgeEssentials:1.8.9-lite:server'	
 }
 
 minecraft {

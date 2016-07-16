@@ -7,8 +7,9 @@ import org.apache.commons.lang3.text.WordUtils;
 import com.derimagia.forgeslack.handler.ConfigurationHandler;
 
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
 
-public class Whisper extends BaseSlackCommand {
+public class Broadcast extends BaseSlackCommand {
 
 	@Override
 	public List<String> getCommandAliases() {
@@ -17,29 +18,29 @@ public class Whisper extends BaseSlackCommand {
 
 	@Override
 	public String getCommandName() {
-		return "say";
+		return "talk";
 	}
 
 	@Override
 	public String getCommandUsage() {
-		return "say, message a user directly. Example: $say ccoladmin1 hello";
+		return "talk, global server message";
 	}
 
 	@Override
 	public void processCommand(String username, String[] args) {
-		String user = args[0];
-		String whisper = "";
-
-		args = SlackCommandRegistry.dropFirstString(args);
+		String msg = "";
 
 		for (String arg : args) {
-			whisper += arg + " ";
+			msg += arg + " ";
 		}
 
-		String message = String.format("/w %s " + ConfigurationHandler.playerSignature + " %s", user,
-				WordUtils.capitalizeFully(username), whisper);
+		String message = String.format("%s " + ConfigurationHandler.playerSignature + " %s",
+				ConfigurationHandler.slackSignature, WordUtils.capitalizeFully(username), msg);
 		message = ConfigurationHandler.formatColors(message);
-		MinecraftServer.getServer().getCommandManager().executeCommand(MinecraftServer.getServer(), message);
+
+		if (!username.isEmpty() && !(username.trim().equals("slackbot"))) {
+			MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentText(message));
+		}
 	}
 
 }

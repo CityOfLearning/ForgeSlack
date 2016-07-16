@@ -44,7 +44,7 @@ public class SlackSender {
 			// I think the 2d looks better
 			slackMessage.setIcon("https://mcapi.ca/avatar/2d/" + username);
 		} else {
-			//use the default icon
+			// use the default icon
 			slackMessage.setIcon("https://dl.dropboxusercontent.com/u/33377940/logo.png");
 		}
 
