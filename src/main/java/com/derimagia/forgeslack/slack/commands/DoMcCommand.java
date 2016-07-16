@@ -1,7 +1,5 @@
 package com.derimagia.forgeslack.slack.commands;
 
-import java.util.List;
-
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
 
@@ -14,7 +12,7 @@ public class DoMcCommand extends BaseSlackCommand {
 
 	@Override
 	public String getCommandUsage() {
-		return "cmd, execute a console command from minecraft";
+		return "cmd\texecute a console command from minecraft";
 	}
 
 	@Override

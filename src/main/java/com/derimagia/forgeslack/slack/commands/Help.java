@@ -20,7 +20,7 @@ public class Help extends BaseSlackCommand {
 
 	@Override
 	public String getCommandUsage() {
-		return "help, get possible commands";
+		return "help\tget possible commands";
 	}
 
 	protected List<ISlackCommand> getSortedPossibleCommands() {
@@ -33,12 +33,11 @@ public class Help extends BaseSlackCommand {
 	public void processCommand(String username, String[] args) {
 		List<ISlackCommand> list = getSortedPossibleCommands();
 
-		String msg = "Possible slack Commands";
+		String msg = "Possible Slack Commands\n----------------------------";
 
 		for (ISlackCommand cmd : list) {
 			msg += "\n" + cmd.getCommandUsage();
 		}
-		msg += "\n----------------------------";
 
 		SlackSender.getInstance().send(msg, "Server");
 	}

@@ -31,7 +31,7 @@ public class Status extends BaseSlackCommand {
 
 	@Override
 	public String getCommandUsage() {
-		return "status, give a comprehensive report of the server status";
+		return "status\tgive a comprehensive report of the server status";
 	}
 
 	@Override
@@ -42,7 +42,8 @@ public class Status extends BaseSlackCommand {
 			try {
 				dimCheck = Integer.parseInt(args[0]);
 			} catch (NumberFormatException nfe) {
-				throw new WrongUsageException("Could not parse the dimension id, %s", new Object[] {getCommandUsage()});
+				throw new WrongUsageException("Could not parse the dimension id, %s",
+						new Object[] { getCommandUsage() });
 			}
 		}
 		String statMsg = "";
@@ -65,24 +66,28 @@ public class Status extends BaseSlackCommand {
 
 		Collections.sort(dims);
 
+		double meanTickTime = mean(MinecraftServer.getServer().tickTimeArray) * 1.0E-6D;
+		double meanTPS = Math.min(1000.0 / meanTickTime, 20);
+		String dimMsg = "Tick Stats Per Dimension:\n" + String.format("Overall: Mean tick time: %s ms. Mean TPS: %s",
+				timeFormatter.format(meanTickTime), timeFormatter.format(meanTPS));
+
 		for (Integer dimId : dims) {
 
 			double worldTickTime = mean(MinecraftServer.getServer().worldTickTimes.get(dimId)) * 1.0E-6D;
 			double worldTPS = Math.min(1000.0 / worldTickTime, 20);
 			if (dimCheck > -2) {
 				if (dimId == dimCheck) {
-					SlackSender.getInstance().send(String.format("Dim %d : Mean tick time: %s ms. Mean TPS: %s", dimId,
-							timeFormatter.format(worldTickTime), timeFormatter.format(worldTPS)), "Server");
+					dimMsg += String.format("\nDim %d : Mean tick time: %s ms. Mean TPS: %s", dimId,
+							timeFormatter.format(worldTickTime), timeFormatter.format(worldTPS));
+					break;
 				}
 			} else {
-				SlackSender.getInstance().send(String.format("Dim %d : Mean tick time: %s ms. Mean TPS: %s", dimId,
-						timeFormatter.format(worldTickTime), timeFormatter.format(worldTPS)), "Server");
+				dimMsg += String.format("\nDim %d : Mean tick time: %s ms. Mean TPS: %s", dimId,
+						timeFormatter.format(worldTickTime), timeFormatter.format(worldTPS));
 			}
 		}
-		double meanTickTime = mean(MinecraftServer.getServer().tickTimeArray) * 1.0E-6D;
-		double meanTPS = Math.min(1000.0 / meanTickTime, 20);
-		SlackSender.getInstance().send(String.format("Overall: Mean tick time: %s ms. Mean TPS: %s",
-				timeFormatter.format(meanTickTime), timeFormatter.format(meanTPS)), "Server");
+
+		SlackSender.getInstance().send(dimMsg, "Server");
 	}
 
 }

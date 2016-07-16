@@ -1,7 +1,5 @@
 package com.derimagia.forgeslack.slack.commands;
 
-import java.util.List;
-
 import org.apache.commons.lang3.text.WordUtils;
 
 import com.derimagia.forgeslack.handler.ConfigurationHandler;
@@ -17,7 +15,7 @@ public class Whisper extends BaseSlackCommand {
 
 	@Override
 	public String getCommandUsage() {
-		return "say, message a user directly. Example: $say ccoladmin1 hello";
+		return "say\tmessage a user directly. Example: $say ccoladmin1 hello";
 	}
 
 	@Override

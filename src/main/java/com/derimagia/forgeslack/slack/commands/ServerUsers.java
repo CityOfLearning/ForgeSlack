@@ -1,7 +1,5 @@
 package com.derimagia.forgeslack.slack.commands;
 
-import java.util.List;
-
 import com.derimagia.forgeslack.slack.SlackSender;
 
 import net.minecraft.server.MinecraftServer;
@@ -15,7 +13,7 @@ public class ServerUsers extends BaseSlackCommand {
 
 	@Override
 	public String getCommandUsage() {
-		return "players, reports number of players and their names";
+		return "players\treports number of players and their names";
 	}
 
 	@Override

@@ -14,7 +14,7 @@ public interface ISlackCommand extends Comparable<ISlackCommand> {
 
 	/**
 	 * Gets the usage string for the command.
-	 * 
+	 *
 	 * @param sender
 	 *            The command sender that executed the command
 	 */
@@ -22,7 +22,7 @@ public interface ISlackCommand extends Comparable<ISlackCommand> {
 
 	/**
 	 * Callback when the command is invoked
-	 * 
+	 *
 	 * @param sender
 	 *            The command sender that executed the command
 	 * @param args

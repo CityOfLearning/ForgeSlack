@@ -10,8 +10,8 @@ import com.derimagia.forgeslack.handler.ConfigurationHandler;
 import com.derimagia.forgeslack.handler.EventHandler;
 import com.derimagia.forgeslack.slack.SlackReceiveServer;
 import com.derimagia.forgeslack.slack.SlackSender;
-import com.dyn.utils.CCOLPlayerInfo;
 import com.derimagia.forgeslack.slack.commands.SlackCommandRegistry;
+import com.dyn.utils.CCOLPlayerInfo;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;

@@ -1,7 +1,5 @@
 package com.derimagia.forgeslack.slack.commands;
 
-import java.util.List;
-
 import org.apache.commons.lang3.text.WordUtils;
 
 import com.derimagia.forgeslack.handler.ConfigurationHandler;
@@ -18,7 +16,7 @@ public class Broadcast extends BaseSlackCommand {
 
 	@Override
 	public String getCommandUsage() {
-		return "talk, global server message";
+		return "talk\tglobal server message";
 	}
 
 	@Override

@@ -43,13 +43,10 @@ public class EventHandler {
 	public void onJoin(PlayerEvent.PlayerLoggedInEvent event) {
 		SlackSender.getInstance().send("_[Joined the Game]_", getName(event.player));
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				if (!ForgeSlack.playerInfo.containsKey(event.player.getDisplayName().getUnformattedText())) {
-					ForgeSlack.playerInfo.put(event.player.getDisplayName().getUnformattedText(),
-							new CCOLPlayerInfo(getName(event.player)));
-				}
+		new Thread(() -> {
+			if (!ForgeSlack.playerInfo.containsKey(event.player.getDisplayName().getUnformattedText())) {
+				ForgeSlack.playerInfo.put(event.player.getDisplayName().getUnformattedText(),
+						new CCOLPlayerInfo(getName(event.player)));
 			}
 		}).start();
 

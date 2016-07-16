@@ -13,7 +13,6 @@ import com.forgeessentials.commons.selections.WorldPoint;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
 
 public class Locate extends BaseSlackCommand {
 
@@ -24,7 +23,7 @@ public class Locate extends BaseSlackCommand {
 
 	@Override
 	public String getCommandUsage() {
-		return "locate, takes a username arguement and reports their location";
+		return "locate\ttakes a username arguement and reports their location";
 	}
 
 	@Override

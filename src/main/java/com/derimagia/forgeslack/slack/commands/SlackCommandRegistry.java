@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.derimagia.forgeslack.ForgeSlack;
-import com.derimagia.forgeslack.handler.ConfigurationHandler;
 import com.derimagia.forgeslack.slack.SlackSender;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
