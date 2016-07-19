@@ -4,7 +4,6 @@ import com.derimagia.forgeslack.ForgeSlack;
 import com.derimagia.forgeslack.slack.SlackSender;
 import com.dyn.utils.CCOLPlayerInfo;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.scoreboard.ScorePlayerTeam;
@@ -79,7 +78,7 @@ public class EventHandler {
 				return;
 			}
 
-			String achievementTitle = I18n.format(event.achievement.getStatName().getUnformattedText(), new Object[0]);
+			IChatComponent achievementTitle = new ChatComponentTranslation(event.achievement.getStatName().getUnformattedText(), new Object[0]);
 			IChatComponent achievementComponent = new ChatComponentTranslation(
 					event.achievement.getStatName().getUnformattedText());
 			IChatComponent achievementText = new ChatComponentText("[").appendSibling(achievementComponent)
