@@ -78,15 +78,13 @@ public class EventHandler {
 				return;
 			}
 
-			IChatComponent achievementTitle = new ChatComponentTranslation(event.achievement.getStatName().getUnformattedText(), new Object[0]);
 			IChatComponent achievementComponent = new ChatComponentTranslation(
 					event.achievement.getStatName().getUnformattedText());
-			IChatComponent achievementText = new ChatComponentText("[").appendSibling(achievementComponent)
-					.appendText("]");
+			IChatComponent achievementText = new ChatComponentText(""+achievementComponent);
 
 			String playerName = getName(event.entityPlayer);
 			SlackSender.getInstance().send("_" + playerName + " has earned the achievement: "
-					+ achievementText.getUnformattedText() + "_" + achievementTitle, playerName);
+					+ achievementText.getUnformattedText(), playerName);
 		}
 	}
 
