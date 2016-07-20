@@ -28,7 +28,9 @@ public class SlackSender {
 	public SlackApi api;
 
 	public SlackSender() {
-		api = new SlackApi(ConfigurationHandler.slackIncomingWebHook);
+		if(ConfigurationHandler.enabled){
+			api = new SlackApi(ConfigurationHandler.slackIncomingWebHook);
+		}
 	}
 
 	/**
@@ -38,24 +40,26 @@ public class SlackSender {
 	 * @param username
 	 */
 	public void send(String message, String username) {
-		SlackMessage slackMessage = new SlackMessage();
-		slackMessage.setText(message);
-		if (ForgeSlack.playerInfo.containsKey(username)) {
-			slackMessage.setUsername(ForgeSlack.playerInfo.get(username).getDisplayName() + "-" + username);
-		} else {
-			slackMessage.setUsername(username);
-		}
+		if(ConfigurationHandler.enabled){
+			SlackMessage slackMessage = new SlackMessage();
+			slackMessage.setText(message);
+			if (ForgeSlack.playerInfo.containsKey(username)) {
+				slackMessage.setUsername(ForgeSlack.playerInfo.get(username).getDisplayName() + "-" + username);
+			} else {
+				slackMessage.setUsername(username);
+			}
 
-		if (!username.toLowerCase().equals("server")) {
-			// I think the 2d looks better
-			slackMessage.setIcon("https://mcapi.ca/avatar/2d/" + username);
-		} else {
-			// use the default icon
-			slackMessage.setIcon("https://dl.dropboxusercontent.com/u/33377940/logo.png");
-		}
+			if (!username.toLowerCase().equals("server")) {
+				// I think the 2d looks better
+				slackMessage.setIcon("https://mcapi.ca/avatar/2d/" + username);
+			} else {
+				// use the default icon
+				slackMessage.setIcon("https://dl.dropboxusercontent.com/u/33377940/logo.png");
+			}
 
-		// Send in a new thread so it doesn't block the game.
-		Thread thread = new Thread(new SlackSendThread(slackMessage));
-		thread.start();
+			// Send in a new thread so it doesn't block the game.
+			Thread thread = new Thread(new SlackSendThread(slackMessage));
+			thread.start();
+		}
 	}
 }
