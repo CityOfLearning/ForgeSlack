@@ -28,7 +28,7 @@ public class SlackSender {
 	public SlackApi api;
 
 	public SlackSender() {
-		if(ConfigurationHandler.enabled){
+		if (ConfigurationHandler.enabled) {
 			api = new SlackApi(ConfigurationHandler.slackIncomingWebHook);
 		}
 	}
@@ -40,7 +40,7 @@ public class SlackSender {
 	 * @param username
 	 */
 	public void send(String message, String username) {
-		if(ConfigurationHandler.enabled){
+		if (ConfigurationHandler.enabled) {
 			SlackMessage slackMessage = new SlackMessage();
 			slackMessage.setUsername(username);
 			if (ForgeSlack.playerInfo.containsKey(username)) {

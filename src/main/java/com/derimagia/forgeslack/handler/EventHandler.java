@@ -83,8 +83,8 @@ public class EventHandler {
 			IChatComponent achievementText = new ChatComponentText("").appendSibling(achievementComponent);
 
 			String playerName = getName(event.entityPlayer);
-			SlackSender.getInstance().send("Earned the achievement: "
-					+ achievementText.getUnformattedText(), playerName);
+			SlackSender.getInstance().send("Earned the achievement: " + achievementText.getUnformattedText(),
+					playerName);
 		}
 	}
 
