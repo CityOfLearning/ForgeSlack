@@ -5,12 +5,11 @@ import org.eclipse.jetty.server.Server;
 import com.derimagia.forgeslack.ForgeSlack;
 import com.derimagia.forgeslack.handler.ConfigurationHandler;
 import com.derimagia.forgeslack.slack.commands.Broadcast;
+import com.derimagia.forgeslack.slack.commands.UserStatus;
 import com.derimagia.forgeslack.slack.commands.DoMcCommand;
 import com.derimagia.forgeslack.slack.commands.Help;
 import com.derimagia.forgeslack.slack.commands.Locate;
-import com.derimagia.forgeslack.slack.commands.ServerUsers;
-import com.derimagia.forgeslack.slack.commands.Status;
-import com.derimagia.forgeslack.slack.commands.Whisper;
+import com.derimagia.forgeslack.slack.commands.ServerStatus;
 
 /**
  * @author derimagia
@@ -29,10 +28,9 @@ public class SlackReceiveServer {
 			ForgeSlack.slackCommands.registerCommand(new Broadcast());
 			ForgeSlack.slackCommands.registerCommand(new DoMcCommand());
 			ForgeSlack.slackCommands.registerCommand(new Locate());
-			ForgeSlack.slackCommands.registerCommand(new ServerUsers());
-			ForgeSlack.slackCommands.registerCommand(new Status());
+			ForgeSlack.slackCommands.registerCommand(new ServerStatus());
 			ForgeSlack.slackCommands.registerCommand(new Help());
-			ForgeSlack.slackCommands.registerCommand(new Whisper());
+			ForgeSlack.slackCommands.registerCommand(new UserStatus());
 
 		} catch (Exception e) {
 			ForgeSlack.log.error("Error starting ForgeSlack server: " + e);
