@@ -42,11 +42,11 @@ public class SlackSender {
 	public void send(String message, String username) {
 		if(ConfigurationHandler.enabled){
 			SlackMessage slackMessage = new SlackMessage();
-			slackMessage.setText(message);
+			slackMessage.setUsername(username);
 			if (ForgeSlack.playerInfo.containsKey(username)) {
-				slackMessage.setUsername(ForgeSlack.playerInfo.get(username).getDisplayName() + "-" + username);
+				slackMessage.setText(ForgeSlack.playerInfo.get(username).getDisplayName() + "-" + message);
 			} else {
-				slackMessage.setUsername(username);
+				slackMessage.setText(message);
 			}
 
 			if (!username.toLowerCase().equals("server")) {
