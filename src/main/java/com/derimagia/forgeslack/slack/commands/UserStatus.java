@@ -57,7 +57,7 @@ public class UserStatus extends BaseSlackCommand {
 									permissions.add("*Group* " + group.getGroup());
 									for (Entry<String, String> perm : subZone.getGroupPermissions(group.getGroup())
 											.entrySet()) {
-										permissions.add("*" + perm.getKey() + "* = " + perm.getValue());
+										permissions.add("" + perm.getKey() + " = " + perm.getValue());
 									}
 								}
 							}
@@ -75,7 +75,7 @@ public class UserStatus extends BaseSlackCommand {
 									"Server");
 				}
 					break;
-				case "locate":{
+				case "locate": {
 					WorldPoint point = new WorldPoint(player);
 					SlackSender.getInstance()
 							.send(String.format("%s is at %d, %d, %d in dim %d with gamemode %s", player.getName(),
@@ -90,6 +90,7 @@ public class UserStatus extends BaseSlackCommand {
 					}
 					SlackSender.getInstance().send(zoneMsg, "Server");
 				}
+					break;
 				default:
 					SlackSender.getInstance().send("Not a recognized Command", "Server");
 					break;
