@@ -27,7 +27,7 @@ public class Broadcast extends BaseSlackCommand {
 		if (args.length > 0) {
 			switch (args[0]) {
 			case "all": {
-				SlackCommandRegistry.dropFirstString(args);
+				args = SlackCommandRegistry.dropFirstString(args);
 
 				String msg = "";
 

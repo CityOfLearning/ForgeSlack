@@ -39,14 +39,14 @@ public class ServerStatus extends BaseSlackCommand {
 		if (args.length > 0) {
 			switch (args[0]) {
 			case "status": {
-				SlackCommandRegistry.dropFirstString(args);
+				args = SlackCommandRegistry.dropFirstString(args);
 				int dimCheck = -2;
 				if (args.length > 0) {
 					try {
 						dimCheck = Integer.parseInt(args[0]);
 					} catch (NumberFormatException nfe) {
 						throw new WrongUsageException("Could not parse the dimension id, %s",
-								new Object[] { getCommandUsage() });
+								new Object[] { args[0] });
 					}
 				}
 				String statMsg = "";

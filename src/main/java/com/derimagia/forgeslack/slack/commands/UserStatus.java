@@ -39,7 +39,7 @@ public class UserStatus extends BaseSlackCommand {
 	public void processCommand(String username, String[] args) throws WrongUsageException {
 		if (args.length > 0) {
 			String user = args[0];
-			SlackCommandRegistry.dropFirstString(args);
+			args = SlackCommandRegistry.dropFirstString(args);
 
 			EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(user);
 
