@@ -19,7 +19,7 @@ public class Broadcast extends BaseSlackCommand {
 
 	@Override
 	public String getCommandUsage() {
-		return "talk\t <all|[user]> send global server messages or private messages. Example: $talk ccoladmin1 hello";
+		return "talk\t <all|user> send global server messages or private messages. Example: $talk ccoladmin1 hello";
 	}
 
 	@Override

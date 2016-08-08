@@ -14,9 +14,6 @@ import com.forgeessentials.api.permissions.GroupEntry;
 import com.forgeessentials.api.permissions.RootZone;
 import com.forgeessentials.api.permissions.ServerZone;
 import com.forgeessentials.api.permissions.Zone;
-//import com.forgeessentials.api.APIRegistry;
-//import com.forgeessentials.api.permissions.Zone;
-//import com.forgeessentials.commons.selections.WorldPoint;
 import com.forgeessentials.commons.selections.WorldPoint;
 
 import net.minecraft.command.WrongUsageException;
@@ -32,7 +29,7 @@ public class UserStatus extends BaseSlackCommand {
 
 	@Override
 	public String getCommandUsage() {
-		return "user\t[user] <perms|groups> takes a username arguement and reports them";
+		return "user\t[user] <perms|groups|locate> takes a username arguement and reports them";
 	}
 
 	@Override
@@ -69,7 +66,7 @@ public class UserStatus extends BaseSlackCommand {
 					SlackSender.getInstance().send(StringUtils.join(permissions, "\n"), "Server");
 				}
 					break;
-				case "group": {
+				case "groups": {
 					SlackSender
 							.getInstance().send(
 									"User *" + player.getDisplayNameString() + "* Groups\n"
@@ -78,6 +75,21 @@ public class UserStatus extends BaseSlackCommand {
 									"Server");
 				}
 					break;
+				case "locate":{
+					WorldPoint point = new WorldPoint(player);
+					SlackSender.getInstance()
+							.send(String.format("%s is at %d, %d, %d in dim %d with gamemode %s", player.getName(),
+									point.getX(), point.getY(), point.getZ(), player.dimension,
+									player.theItemInWorldManager.getGameType().getName()), "Server");
+
+					String zoneMsg = "Player is in zones:";
+					List<Zone> zones = APIRegistry.perms.getServerZone().getZonesAt(point);
+					Collections.reverse(zones);
+					for (Zone zone : zones) {
+						zoneMsg += "\n" + zone.getName();
+					}
+					SlackSender.getInstance().send(zoneMsg, "Server");
+				}
 				default:
 					SlackSender.getInstance().send("Not a recognized Command", "Server");
 					break;

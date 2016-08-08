@@ -8,6 +8,7 @@ import com.derimagia.forgeslack.slack.commands.Broadcast;
 import com.derimagia.forgeslack.slack.commands.DoMcCommand;
 import com.derimagia.forgeslack.slack.commands.Help;
 import com.derimagia.forgeslack.slack.commands.Locate;
+import com.derimagia.forgeslack.slack.commands.Purge;
 import com.derimagia.forgeslack.slack.commands.ServerStatus;
 import com.derimagia.forgeslack.slack.commands.UserStatus;
 
@@ -27,10 +28,10 @@ public class SlackReceiveServer {
 
 			ForgeSlack.slackCommands.registerCommand(new Broadcast());
 			ForgeSlack.slackCommands.registerCommand(new DoMcCommand());
-			ForgeSlack.slackCommands.registerCommand(new Locate());
 			ForgeSlack.slackCommands.registerCommand(new ServerStatus());
 			ForgeSlack.slackCommands.registerCommand(new Help());
 			ForgeSlack.slackCommands.registerCommand(new UserStatus());
+			ForgeSlack.slackCommands.registerCommand(new Purge());
 
 		} catch (Exception e) {
 			ForgeSlack.log.error("Error starting ForgeSlack server: " + e);
