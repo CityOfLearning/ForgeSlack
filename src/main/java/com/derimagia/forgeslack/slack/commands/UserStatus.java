@@ -37,7 +37,7 @@ public class UserStatus extends BaseSlackCommand {
 
 	@Override
 	public void processCommand(String username, String[] args) throws WrongUsageException {
-		if(args.length > 0){
+		if (args.length > 0) {
 			String user = args[0];
 			SlackCommandRegistry.dropFirstString(args);
 

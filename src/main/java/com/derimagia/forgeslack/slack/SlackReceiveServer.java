@@ -5,11 +5,11 @@ import org.eclipse.jetty.server.Server;
 import com.derimagia.forgeslack.ForgeSlack;
 import com.derimagia.forgeslack.handler.ConfigurationHandler;
 import com.derimagia.forgeslack.slack.commands.Broadcast;
-import com.derimagia.forgeslack.slack.commands.UserStatus;
 import com.derimagia.forgeslack.slack.commands.DoMcCommand;
 import com.derimagia.forgeslack.slack.commands.Help;
 import com.derimagia.forgeslack.slack.commands.Locate;
 import com.derimagia.forgeslack.slack.commands.ServerStatus;
+import com.derimagia.forgeslack.slack.commands.UserStatus;
 
 /**
  * @author derimagia
