@@ -6,7 +6,6 @@ import com.dyn.utils.CCOLPlayerInfo;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
@@ -15,6 +14,7 @@ import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AchievementEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
@@ -24,7 +24,10 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 public class EventHandler {
 
 	private static String getName(EntityPlayer player) {
-		return ScorePlayerTeam.formatPlayerName(player.getTeam(), player.getDisplayName().getUnformattedText());
+		// return ScorePlayerTeam.formatPlayerName(player.getTeam(),
+		// player.getDisplayName().getUnformattedText());
+		// slack doesnt have color formatting so dont bother it just looks dumb
+		return player.getDisplayName().getUnformattedText();
 	}
 
 	@SubscribeEvent
@@ -88,7 +91,7 @@ public class EventHandler {
 		}
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void serverChat(ServerChatEvent event) {
 		if (!(event.player instanceof FakePlayer)) {
 			SlackSender.getInstance().send(event.message, getName(event.player));
