@@ -44,7 +44,7 @@ public class SlackSender {
 			SlackMessage slackMessage = new SlackMessage();
 			slackMessage.setUsername(username);
 			if (ForgeSlack.playerInfo.containsKey(username)) {
-				slackMessage.setText(ForgeSlack.playerInfo.get(username).getDisplayName() + "-" + message);
+				slackMessage.setText("*" + ForgeSlack.playerInfo.get(username).getDisplayName() + "*-" + message);
 			} else {
 				slackMessage.setText(message);
 			}

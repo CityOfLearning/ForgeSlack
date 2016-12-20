@@ -45,8 +45,7 @@ public class ServerStatus extends BaseSlackCommand {
 					try {
 						dimCheck = Integer.parseInt(args[0]);
 					} catch (NumberFormatException nfe) {
-						throw new WrongUsageException("Could not parse the dimension id, %s",
-								new Object[] { args[0] });
+						throw new WrongUsageException("Could not parse the dimension id, %s", new Object[] { args[0] });
 					}
 				}
 				String statMsg = "";
