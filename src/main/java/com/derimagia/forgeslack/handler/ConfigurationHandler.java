@@ -59,6 +59,9 @@ public class ConfigurationHandler {
 		playerSignature = configuration.getString("playerSignature", Configuration.CATEGORY_GENERAL, "<%s>",
 				"How Slack Messages usernames are formatted ");
 
+		slackIncomingWebHook = slackIncomingWebHook.trim();
+		slackToken = slackToken.trim();
+
 		if (slackIncomingWebHook.isEmpty()) {
 			enabled = false;
 			ForgeSlack.log.error("Slack Incoming WebHook is empty. Disabling Mod.");
