@@ -16,7 +16,7 @@ buildscript {
 }
 
 plugins {
-    id "com.github.johnrengelman.shadow" version "1.2.2" // shading
+    id "com.github.johnrengelman.shadow" version "1.2.4" // shading
 }
 apply plugin: "net.minecraftforge.gradle.forge"  // adds the forge dependency
 
@@ -36,9 +36,14 @@ archivesBaseName = "forgeslack"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+configurations {
+    shade
+    compile.extendsFrom shade
+}
+
 dependencies {
-    compile 'net.gpedro.integrations.slack:slack-webhook:1.1.2'
-    compile 'org.eclipse.jetty:jetty-server:9.2.14.v20151106'
+    shade 'net.gpedro.integrations.slack:slack-webhook:1.1.2'
+    shade 'org.eclipse.jetty:jetty-server:9.2.14.v20151106'
 	compile 'com.github.CityOfLearning:ForgeEssentials:1.8.9-lite:server'
 	compile files('libs/DYNCityServer.jar');
 }
@@ -54,11 +59,10 @@ minecraft {
 shadowJar {
     classifier = ""
 	
+	configurations = [project.configurations.shade]
+	
 	exclude 'dyn/**', '**/dyn'
 	
-	dependencies {
-		exclude(dependency('com.github.CityOfLearning:ForgeEssentials:1.8.9-lite:server'))
-	}
     relocate "net.gpedro.integrations.slack", "com.derimagia.forgeslack.net.gpedro.integrations.slack"
     relocate "org.eclipse.jetty", "com.derimagia.forgeslack.org.eclipse.jetty"
 }
