@@ -11,6 +11,6 @@ public abstract class BaseSlackCommand implements ISlackCommand {
 
 	@Override
 	public List<String> getCommandAliases() {
-		return Collections.<String> emptyList();
+		return Collections.<String>emptyList();
 	}
 }
