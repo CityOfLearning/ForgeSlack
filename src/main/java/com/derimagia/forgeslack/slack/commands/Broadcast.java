@@ -63,7 +63,7 @@ public class Broadcast extends BaseSlackCommand {
 					MinecraftServer.getServer().getCommandManager().executeCommand(MinecraftServer.getServer(),
 							message);
 				} else {
-					SlackSender.getInstance().send("Cannot find player", "Server");
+					SlackSender.getInstance().sendServer("Cannot find player");
 				}
 			}
 				break;

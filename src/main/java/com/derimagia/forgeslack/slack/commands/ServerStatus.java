@@ -58,9 +58,9 @@ public class ServerStatus extends BaseSlackCommand {
 				statMsg += "Average tick time: "
 						+ timeFormatter.format(mean(MinecraftServer.getServer().tickTimeArray) * 1.0E-6D) + " ms\n";
 
-				SlackSender.getInstance().send(statMsg, "Server");
+				SlackSender.getInstance().sendServer(statMsg);
 
-				List<Integer> dims = new ArrayList<Integer>();
+				List<Integer> dims = new ArrayList<>();
 
 				for (Integer id : DimensionManager.getIDs()) {
 					dims.add(id);
@@ -90,21 +90,21 @@ public class ServerStatus extends BaseSlackCommand {
 					}
 				}
 
-				SlackSender.getInstance().send(dimMsg, "Server");
+				SlackSender.getInstance().sendServer(dimMsg);
 			}
 				break;
 			case "players": {
-				SlackSender.getInstance().send(String.format("Server has %d users logged on",
-						MinecraftServer.getServer().getCurrentPlayerCount()), "Server");
+				SlackSender.getInstance().sendServer(String.format("Server has %d users logged on",
+						MinecraftServer.getServer().getCurrentPlayerCount()));
 				String users = "";
 				for (String user : MinecraftServer.getServer().getAllUsernames()) {
 					users += user + ", ";
 				}
-				SlackSender.getInstance().send("Usernames: " + users, "Server");
+				SlackSender.getInstance().sendServer("Usernames: " + users);
 			}
 				break;
 			default:
-				SlackSender.getInstance().send("Not a recognized Command", "Server");
+				SlackSender.getInstance().sendServer("Not a recognized Command");
 				break;
 			}
 		} else {

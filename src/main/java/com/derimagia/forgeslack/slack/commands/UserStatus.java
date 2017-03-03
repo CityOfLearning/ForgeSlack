@@ -44,7 +44,7 @@ public class UserStatus extends BaseSlackCommand {
 				switch (args[0]) {
 				case "perms": {
 					WorldPoint point = new WorldPoint(player);
-					List<String> permissions = new ArrayList<String>();
+					List<String> permissions = new ArrayList<>();
 					permissions.add("Current Player Permissions are:");
 					List<Zone> zones = APIRegistry.perms.getServerZone().getZonesAt(point);
 					Collections.reverse(zones);
@@ -63,24 +63,21 @@ public class UserStatus extends BaseSlackCommand {
 							}
 						}
 					}
-					SlackSender.getInstance().send(StringUtils.join(permissions, "\n"), "Server");
+					SlackSender.getInstance().sendServer(StringUtils.join(permissions, "\n"));
 				}
 					break;
 				case "groups": {
-					SlackSender
-							.getInstance().send(
-									"User *" + player.getDisplayNameString() + "* Groups\n"
-											+ StringUtils.join(APIRegistry.perms
-													.getPlayerGroups(UserIdent.get(player.getPersistentID())), "\n"),
-									"Server");
+					SlackSender.getInstance()
+							.sendServer("User *" + player.getDisplayNameString() + "* Groups\n" + StringUtils.join(
+									APIRegistry.perms.getPlayerGroups(UserIdent.get(player.getPersistentID())), "\n"));
 				}
 					break;
 				case "locate": {
 					WorldPoint point = new WorldPoint(player);
 					SlackSender.getInstance()
-							.send(String.format("%s is at %d, %d, %d in dim %d with gamemode %s", player.getName(),
-									point.getX(), point.getY(), point.getZ(), player.dimension,
-									player.theItemInWorldManager.getGameType().getName()), "Server");
+							.sendServer(String.format("%s is at %d, %d, %d in dim %d with gamemode %s",
+									player.getName(), point.getX(), point.getY(), point.getZ(), player.dimension,
+									player.theItemInWorldManager.getGameType().getName()));
 
 					String zoneMsg = "Player is in zones:";
 					List<Zone> zones = APIRegistry.perms.getServerZone().getZonesAt(point);
@@ -88,16 +85,16 @@ public class UserStatus extends BaseSlackCommand {
 					for (Zone zone : zones) {
 						zoneMsg += "\n" + zone.getName();
 					}
-					SlackSender.getInstance().send(zoneMsg, "Server");
+					SlackSender.getInstance().sendServer(zoneMsg);
 				}
 					break;
 				default:
-					SlackSender.getInstance().send("Not a recognized Command", "Server");
+					SlackSender.getInstance().sendServer("Not a recognized Command");
 					break;
 				}
 
 			} else {
-				SlackSender.getInstance().send("Cannot find player", "Server");
+				SlackSender.getInstance().sendServer("Cannot find player");
 			}
 		} else {
 			throw new WrongUsageException("", new Object[] {});

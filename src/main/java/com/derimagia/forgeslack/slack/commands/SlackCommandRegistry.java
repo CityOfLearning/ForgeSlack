@@ -27,9 +27,9 @@ public class SlackCommandRegistry {
 		return astring;
 	}
 
-	private final Map<String, ISlackCommand> commandMap = Maps.<String, ISlackCommand> newHashMap();
+	private final Map<String, ISlackCommand> commandMap = Maps.<String, ISlackCommand>newHashMap();
 
-	private final Set<ISlackCommand> commandSet = Sets.<ISlackCommand> newHashSet();
+	private final Set<ISlackCommand> commandSet = Sets.<ISlackCommand>newHashSet();
 
 	public boolean executeCommand(String sender, String rawCommand) {
 		rawCommand = rawCommand.trim();
@@ -44,7 +44,7 @@ public class SlackCommandRegistry {
 		ISlackCommand slackCmd = commandMap.get(s);
 
 		if (slackCmd == null) {
-			SlackSender.getInstance().send("Command not recognized: " + s, "Server");
+			SlackSender.getInstance().sendServer("Command not recognized: " + s);
 			return false;
 		}
 
@@ -56,7 +56,7 @@ public class SlackCommandRegistry {
 	}
 
 	public List<ISlackCommand> getPossibleCommands() {
-		List<ISlackCommand> list = Lists.<ISlackCommand> newArrayList();
+		List<ISlackCommand> list = Lists.<ISlackCommand>newArrayList();
 
 		for (ISlackCommand ISlackCommand : commandSet) {
 			list.add(ISlackCommand);
@@ -94,12 +94,12 @@ public class SlackCommandRegistry {
 					new Object[] { new ChatComponentTranslation(wrongusageexception.getMessage(),
 							wrongusageexception.getErrorObjects()) });
 			chatcomponenttranslation2.getChatStyle().setColor(EnumChatFormatting.RED);
-			SlackSender.getInstance().send(chatcomponenttranslation2.getUnformattedText(), "Server");
+			SlackSender.getInstance().sendServer(chatcomponenttranslation2.getUnformattedText());
 		} catch (CommandException commandexception) {
 			ChatComponentTranslation chatcomponenttranslation1 = new ChatComponentTranslation(
 					commandexception.getMessage(), commandexception.getErrorObjects());
 			chatcomponenttranslation1.getChatStyle().setColor(EnumChatFormatting.RED);
-			SlackSender.getInstance().send(chatcomponenttranslation1.getUnformattedText(), "Server");
+			SlackSender.getInstance().sendServer(chatcomponenttranslation1.getUnformattedText());
 		}
 
 		return false;

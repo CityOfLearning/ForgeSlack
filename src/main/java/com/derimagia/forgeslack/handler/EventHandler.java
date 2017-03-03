@@ -1,8 +1,6 @@
 package com.derimagia.forgeslack.handler;
 
-import com.derimagia.forgeslack.ForgeSlack;
 import com.derimagia.forgeslack.slack.SlackSender;
-import com.dyn.utils.CCOLPlayerInfo;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -23,13 +21,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
  */
 public class EventHandler {
 
-	private static String getName(EntityPlayer player) {
-		// return ScorePlayerTeam.formatPlayerName(player.getTeam(),
-		// player.getDisplayName().getUnformattedText());
-		// slack doesnt have color formatting so dont bother it just looks dumb
-		return player.getDisplayName().getUnformattedText();
-	}
-
 	@SubscribeEvent
 	public void commandUsed(CommandEvent event) {
 		if (event.sender.getCommandSenderEntity() instanceof EntityPlayer) {
@@ -37,29 +28,18 @@ public class EventHandler {
 			for (String params : event.parameters) {
 				command += " " + params;
 			}
-			SlackSender.getInstance().send(command, event.sender.getName());
+			SlackSender.getInstance().send(command, (EntityPlayer) event.sender);
 		}
 	}
 
 	@SubscribeEvent
 	public void onJoin(PlayerEvent.PlayerLoggedInEvent event) {
-		SlackSender.getInstance().send("_[Joined the Game]_", getName(event.player));
-
-		new Thread(() -> {
-			if (!ForgeSlack.playerInfo.containsKey(event.player.getDisplayName().getUnformattedText())) {
-				ForgeSlack.playerInfo.put(event.player.getDisplayName().getUnformattedText(),
-						new CCOLPlayerInfo(getName(event.player)));
-			}
-		}).start();
-
+		SlackSender.getInstance().send("_[Joined the Game]_", event.player);
 	}
 
 	@SubscribeEvent
 	public void onLeave(PlayerEvent.PlayerLoggedOutEvent event) {
-		SlackSender.getInstance().send("_[Left the Game]_", getName(event.player));
-		if (ForgeSlack.playerInfo.containsKey(event.player.getDisplayName().getUnformattedText())) {
-			ForgeSlack.playerInfo.remove(event.player.getDisplayName().getUnformattedText());
-		}
+		SlackSender.getInstance().send("_[Left the Game]_", event.player);
 	}
 
 	@SubscribeEvent
@@ -67,7 +47,7 @@ public class EventHandler {
 		if (event.entityLiving instanceof EntityPlayer) {
 			SlackSender.getInstance().send(
 					"_" + event.entityLiving.getCombatTracker().getDeathMessage().getUnformattedText() + "_",
-					getName((EntityPlayer) event.entityLiving));
+					(EntityPlayer) event.entityLiving);
 		}
 	}
 
@@ -85,16 +65,15 @@ public class EventHandler {
 					event.achievement.getStatName().getUnformattedText());
 			IChatComponent achievementText = new ChatComponentText("").appendSibling(achievementComponent);
 
-			String playerName = getName(event.entityPlayer);
 			SlackSender.getInstance().send("Earned the achievement: " + achievementText.getUnformattedText(),
-					playerName);
+					event.entityPlayer);
 		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void serverChat(ServerChatEvent event) {
 		if (!(event.player instanceof FakePlayer)) {
-			SlackSender.getInstance().send(event.message, getName(event.player));
+			SlackSender.getInstance().send(event.message, event.player);
 		}
 	}
 

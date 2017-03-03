@@ -39,7 +39,7 @@ public class Help extends BaseSlackCommand {
 			msg += "\n" + cmd.getCommandUsage();
 		}
 
-		SlackSender.getInstance().send(msg, "Server");
+		SlackSender.getInstance().sendServer(msg);
 	}
 
 }

@@ -1,8 +1,5 @@
 package com.derimagia.forgeslack;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,8 +8,8 @@ import com.derimagia.forgeslack.handler.EventHandler;
 import com.derimagia.forgeslack.slack.SlackReceiveServer;
 import com.derimagia.forgeslack.slack.SlackSender;
 import com.derimagia.forgeslack.slack.commands.SlackCommandRegistry;
-import com.dyn.utils.CCOLPlayerInfo;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -34,7 +31,9 @@ public class ForgeSlack {
 
 	public static Logger log = LogManager.getLogger(modId);
 
-	public static Map<String, CCOLPlayerInfo> playerInfo = new HashMap<String, CCOLPlayerInfo>();
+	public static String getName(EntityPlayer player) {
+		return player.getDisplayNameString();
+	}
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
@@ -60,7 +59,7 @@ public class ForgeSlack {
 			ForgeSlack.log.info("Server Started");
 			if (ConfigurationHandler.enabled) {
 				new SlackReceiveServer();
-				SlackSender.getInstance().send("_Server is Online_", "Server");
+				SlackSender.getInstance().sendServer("_Server is Online_");
 			}
 		}
 	}
@@ -70,7 +69,7 @@ public class ForgeSlack {
 		if (event.getSide() == Side.SERVER) {
 			ForgeSlack.log.info("Server Stopping");
 			if (ConfigurationHandler.enabled) {
-				SlackSender.getInstance().send("_Server is Shutting Down_", "Server");
+				SlackSender.getInstance().sendServer("_Server is Shutting Down_");
 			}
 		}
 	}

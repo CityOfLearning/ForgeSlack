@@ -32,7 +32,7 @@ public class SlackReceiveHandler extends AbstractHandler {
 			if (text.charAt(0) == '$') {
 				if (!token.isEmpty() && token.equals(ConfigurationHandler.slackToken)) {
 					if (!ForgeSlack.slackCommands.executeCommand(username, text)) {
-						SlackSender.getInstance().send("Failed to Execute Command", "Server");
+						SlackSender.getInstance().sendServer("Failed to Execute Command");
 					}
 				}
 			}

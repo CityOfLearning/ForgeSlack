@@ -38,15 +38,15 @@ public class Purge extends BaseSlackCommand {
 							MinecraftServer.getServer().getCommandManager().executeCommand(player, "/spawn");
 						}
 						((ChunkProviderServer) world.getChunkProvider()).unloadAllChunks();
-						SlackSender.getInstance().send("Purged world successfully", "Server");
+						SlackSender.getInstance().sendServer("Purged world successfully");
 					} else {
-						SlackSender.getInstance().send("Unable to purge chunks", "Server");
+						SlackSender.getInstance().sendServer("Unable to purge chunks");
 					}
 				} else {
-					SlackSender.getInstance().send("World does not exist", "Server");
+					SlackSender.getInstance().sendServer("World does not exist");
 				}
 			} catch (NumberFormatException nfe) {
-				SlackSender.getInstance().send("Error parsing int", "Server");
+				SlackSender.getInstance().sendServer("Error parsing int");
 			}
 		} else {
 			throw new WrongUsageException("", new Object[] {});
