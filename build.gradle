@@ -29,9 +29,9 @@ repositories {
 	}
 }
 
-version = "dyn-0.2"
+version = "dyn-0.3"
 group= "com.derimagia.forgeslack" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "forgeslack"
+archivesBaseName = "ForgeSlack"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
