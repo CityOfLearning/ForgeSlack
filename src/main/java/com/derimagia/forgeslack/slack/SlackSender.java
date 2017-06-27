@@ -7,6 +7,7 @@ import com.dyn.DYNServerMod;
 import net.gpedro.integrations.slack.SlackApi;
 import net.gpedro.integrations.slack.SlackMessage;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumChatFormatting;
 
 /**
  * @author derimagia
@@ -43,6 +44,7 @@ public class SlackSender {
 	 */
 	public void send(String message, EntityPlayer player) {
 		if (ConfigurationHandler.enabled) {
+			message = EnumChatFormatting.getTextWithoutFormattingCodes(message);
 			SlackMessage slackMessage = new SlackMessage();
 			slackMessage.setUsername(ForgeSlack.getName(player));
 			if (DYNServerMod.playersCcolInfo.containsKey(player)) {
@@ -68,6 +70,7 @@ public class SlackSender {
 	 */
 	public void sendServer(String message) {
 		if (ConfigurationHandler.enabled) {
+			message = EnumChatFormatting.getTextWithoutFormattingCodes(message);
 			SlackMessage slackMessage = new SlackMessage();
 			slackMessage.setUsername("Server");
 			slackMessage.setText(message);
